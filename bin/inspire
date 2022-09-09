@@ -1,0 +1,82 @@
+#! /bin/bash
+rm /dev/shm/sem.promethean
+cd /usr/local/bin/activsoftware
+activdashboard_Dir="/usr/local/bin/activsoftware/workbench"
+export LD_LIBRARY_PATH="$activdashboard_Dir/lib:$activdashboard_Dir:$PWD:$PWD/32bit_libs_for_64bit_OS:/usr/local/lib32:/usr/local/lib:$LD_LIBRARY_PATH:/usr/share/zero-lliurex-promethean/x86_64-linux-gnu"
+export GST_PLUGIN_PATH="$PWD/32bit_libs_for_64bit_OS:$GST_PLUGIN_PATH"
+export QTWEBKIT_PLUGIN_PATH="$PWD/32bit_libs_for_64bit_OS:$QTWEBKIT_PLUGIN_PATH"
+
+if [ "`id -u`" = "0" ]; then
+	if [ `which zenity` ]; then
+		zenity --warning --text "It is not recommended to use ActivInspire as root."
+	else 
+	echo It is not recommended to use ActivInspire as root.
+	sleep 3
+	fi
+fi
+
+while [ -n "$1" ]; do
+	case "$1" in
+		"--nocomposite"|"-nc")
+			COMPOSITE="0"
+		;;
+	*)
+		ARGS="$ARGS $1"
+	;;
+	esac
+	shift
+done
+
+if [ "$DESKTOP_SESSION" == "gnome" ]; then
+if [ "$COMPOSITE" == "0" ]; then
+	# we need to turn off compositing
+	COMPIZ=`(ps -e |grep -is compiz) &> /dev/null && echo y`
+
+	if [ "$COMPIZ" == "y" ]; then
+		killall compiz
+		metacity --replace &
+		sleep 1
+	fi
+
+	# compiz is not running, what about metacity ?
+	METACITY=`(ps -e |grep -is metacity) &> /dev/null && echo y`
+	ISCOMPOSITE=`gconftool-2 --get /apps/metacity/general/compositing_manager|tr "[:upper:]" "[:lower:]"`
+
+	if [ "$METACITY" == "y" -a "$ISCOMPOSITE" == "true" ]; then
+		gconftool-2 --set /apps/metacity/general/compositing_manager --type bool false
+		sleep 1
+	fi 
+fi
+fi
+
+#if ubuntu and compiz and uniy turn off compiz setting "Show minimized windows in switcher"
+if [ `which gconftool-2` ]; then
+	UNITYSHOWMINIMIZED=`(gconftool-2 --get /apps/compiz-1/plugins/unityshell/screen0/options/show_minimized_windows | grep -is true) &> /dev/null && echo y`
+	if [ "$UNITYSHOWMINIMIZED" == "y" ]; then
+		gconftool-2 --set /apps/compiz-1/plugins/unityshell/screen0/options/show_minimized_windows --type bool false
+		sleep 1
+	fi
+fi
+
+./Inspire $ARGS
+
+# turn compositing back on if we turned it off doesn't work: metacity locks up on occasion...
+
+if [ "$DESKTOP_SESSION" == "gnome" ]; then
+if [ "$ALLOWRESTART" == "1" -a "$COMPOSITE" == "0" ]; then
+	if [ "$COMPIZ" == "y" ]; then
+		killall metacity
+		compiz --replace &
+	fi
+	
+	if [ "$METACITY" == "y" -a "$ISCOMPOSITE" == "true" ]; then
+		killall metacity;gconftool-2 --set /apps/metacity/general/compositing_manager --type bool true;(metacity --replace&)
+		sleep 2
+	fi
+fi
+fi
+
+#if ubuntu 12.04 turn on compiz setting "Show minimized windows in switcher" if necessary
+if [ "$UNITYSHOWMINIMIZED" == "y" ]; then
+	gconftool-2 --set /apps/compiz-1/plugins/unityshell/screen0/options/show_minimized_windows --type bool true
+fi
