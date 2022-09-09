@@ -1,0 +1,10 @@
+echo "^^^^^^^**************"
+echo "^^^^^^^**************"
+echo "PREINSTALLING $1"
+echo "^^^^^^^**************"
+echo "^^^^^^^**************"
+if 
+	test "$1" = install 
+then
+		dpkg-divert --add --rename /usr/local/bin/inspire
+fi

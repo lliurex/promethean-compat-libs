@@ -1,0 +1,10 @@
+promethean-compat-libs (0.1) focal; urgency=medium
+
+  * Initial release.
+  * Includes:
+  *  libcrypto.so.1.0.0 libicui18n.so.60 libicuio.so.60.2 libicutu.so.60 libicuuc.so.60.2
+  *  libicudata.so.60  libicui18n.so.60.2 libicutest.so.60 libicutu.so.60.2 libssl.so.1.0.0
+  *  libicudata.so.60.2 libicuio.so.60 libicutest.so.60.2 libicuuc.so.60
+
+
+ -- Juanma1980 <juanma1980@gmail.com>  Fri, 09 Sep 2022 18:48:00 +0200

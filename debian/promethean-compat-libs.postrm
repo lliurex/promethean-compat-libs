@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+APT=/usr/sbin/apt
+APTGET=/usr/sbin/apt-get
+APTOVERLAY=/usr/sbin/apt-overlay
+case $1 in 
+	remove|purge|abort-install|disappear)
+		dpkg-divert --package promethean-compat-libs --remove --rename /usr/local/bin/inspire
+esac
+
+#DEBHELPER#
