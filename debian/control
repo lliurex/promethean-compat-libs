@@ -10,7 +10,7 @@ Homepage: http://lliurex.net
 
 Package: promethean-compat-libs
 Architecture: all
-Depends: activtools
+Depends: promethean-fixboot
 Pre-Depends: activinspire
 Description: Legacy libraries needed for activinspire
 
