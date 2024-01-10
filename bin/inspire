@@ -5,6 +5,7 @@ activdashboard_Dir="/usr/local/bin/activsoftware/workbench"
 export LD_LIBRARY_PATH="$activdashboard_Dir/lib:$activdashboard_Dir:$PWD:$PWD/32bit_libs_for_64bit_OS:/usr/local/lib32:/usr/local/lib:$LD_LIBRARY_PATH:/usr/share/zero-lliurex-promethean/x86_64-linux-gnu"
 export GST_PLUGIN_PATH="$PWD/32bit_libs_for_64bit_OS:$GST_PLUGIN_PATH"
 export QTWEBKIT_PLUGIN_PATH="$PWD/32bit_libs_for_64bit_OS:$QTWEBKIT_PLUGIN_PATH"
+export XDG_DATA_DIRS=/usr/share/zero-lliurex-promethean/share:$XDG_DATA_DIRS
 
 if [ "`id -u`" = "0" ]; then
 	if [ `which zenity` ]; then
