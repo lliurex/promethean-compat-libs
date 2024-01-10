@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -e
+
+case $1 in
+        configure)
+			glib-compile-schemas /usr/share/zero-lliurex-promethean/share/glib2-0/schemas
+	;;
+	*)
+	        echo "[DEBUG] Unknow action ..."
+	        ;;
+		
+esac
+	
+	
+#DEBHELPER#
+
+exit 0 		
+ 
